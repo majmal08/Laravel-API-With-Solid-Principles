@@ -2,12 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatientRequest;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\PatientRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+use App\Imports\UsersImport;
+use App\Jobs\TestSendEmail;
 use App\Models\Patient;
+
 
 class PatientController extends BaseController
 {
+
+    public function fileImport(Request $request)
+    {
+
+       $data = Excel::toArray( new UsersImport, $request->file( 'file' ))[0];
+
+       $userJob = new TestSendEmail($data);       
+       $this->dispatch($userJob);
+       return redirect()->route('import.done');
+           
+    }
+
+    public function impoertDone(){
+        return view('importDone');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,11 +56,11 @@ class PatientController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(PatientRequest $request)
-    {
+    {        
         try {
             $request->validated();
             Patient::create($request->all());
@@ -52,7 +73,7 @@ class PatientController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Patient  $patient
+     * @param \App\Patient $patient
      * @return \Illuminate\Http\Response
      */
     public function show(Patient $patient)
@@ -63,7 +84,7 @@ class PatientController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Patient  $patient
+     * @param \App\Patient $patient
      * @return \Illuminate\Http\Response
      */
     public function edit(Patient $patient)
@@ -78,8 +99,8 @@ class PatientController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Patient  $patient
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Patient $patient
      * @return \Illuminate\Http\Response
      */
     public function update(PatientRequest $request, Patient $patient)
@@ -96,7 +117,7 @@ class PatientController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Patient  $patient
+     * @param \App\Patient $patient
      * @return \Illuminate\Http\Response
      */
     public function destroy(Patient $patient)
@@ -108,4 +129,5 @@ class PatientController extends BaseController
             return $this->errorResponse(false, 'something went wrong', 500);
         }
     }
+
 }

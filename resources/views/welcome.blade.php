@@ -61,6 +61,31 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+
+            * {
+                    box-sizing: border-box;
+                  }
+                  
+                  .parent {
+                    width: 65px;
+                    height: 65px;
+                    margin: 3em auto;
+                    border: 1px solid green;
+                    position: relative;
+                  }
+                  
+                  .diamond {
+                    width: calc(100%/1.4142);
+                    height: calc(100%/1.4142);
+                    border: 3px solid #0E4991;
+                    position: absolute;
+                    ;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) rotate(45deg);
+                  }
+
         </style>
     </head>
     <body>
@@ -84,16 +109,30 @@
                     Laravel
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div class="container mt-5 text-center">
+                    <h2 class="mb-4">
+                        Upload Excel file
+                    </h2>
+                    <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-4" style="max-width: 500px; margin: 0 auto;">
+                            <div class="custom-file text-left">
+                                <input type="file" name="file" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                        </div>
+                       <div>
+                        <button type="submit" class="btn btn-primary">upload</button>
+                       </div>
+                    </form>
                 </div>
+
+                
+                  
+                  <div class="parent">
+                    <div class="diamond"></div>
+                  </div>
+                  
             </div>
         </div>
     </body>

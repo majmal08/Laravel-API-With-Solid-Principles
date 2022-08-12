@@ -13,8 +13,14 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/para/{number}', 'HomeController@index');
 
 Route::post('/login', 'Auth\RegisterController@login');
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('patient', PatientController::class);
+
 });
+
+
+
+

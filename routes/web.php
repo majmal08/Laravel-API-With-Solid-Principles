@@ -17,6 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('import', 'PatientController@fileImport')->name('import');
+Route::get('import-done', 'PatientController@impoertDone')->name('import.done');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
