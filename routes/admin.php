@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,15 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/yes', function () {
+
+    dd('hello admin route');
+
     return view('welcome');
 });
-
-Route::post('import', 'PatientController@fileImport')->name('import');
-Route::get('import-done', 'PatientController@impoertDone')->name('import.done');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
- 
-Route::resource('tasks', TaskController::class);

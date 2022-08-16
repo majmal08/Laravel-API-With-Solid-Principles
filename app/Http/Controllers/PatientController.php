@@ -10,22 +10,24 @@ use App\Imports\UsersImport;
 use App\Jobs\TestSendEmail;
 use App\Models\Patient;
 
-
 class PatientController extends BaseController
 {
 
     public function fileImport(Request $request)
     {
+        if ($request->file('file')) {
+            $data = Excel::toArray(new UsersImport, $request->file('file'))[0];
+            $userJob = new TestSendEmail($data);
+            $this->dispatch($userJob);
+            return redirect()->route('import.done');
 
-       $data = Excel::toArray( new UsersImport, $request->file( 'file' ))[0];
-
-       $userJob = new TestSendEmail($data);       
-       $this->dispatch($userJob);
-       return redirect()->route('import.done');
-           
+        } else {
+            return view('welcome');
+        }
     }
 
-    public function impoertDone(){
+    public function impoertDone()
+    {
         return view('importDone');
     }
 
@@ -60,7 +62,7 @@ class PatientController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function store(PatientRequest $request)
-    {        
+    {
         try {
             $request->validated();
             Patient::create($request->all());
@@ -129,5 +131,4 @@ class PatientController extends BaseController
             return $this->errorResponse(false, 'something went wrong', 500);
         }
     }
-
 }
